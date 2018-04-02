@@ -12,6 +12,7 @@ const port = process.env.PORT || 3000;
 var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
+var generateMessage = require('./utils/message').generateMessage;
 
 // hbs.registerPartials(path.join(__dirname, '/vies/partials'));
 
@@ -35,17 +36,9 @@ io.on('connection', function (socket) {
   //   createAt: 123
   // });
 
-  socket.emit('newMessage', {
-    from: 'Admin',
-    text: 'Welcome to the chat app',
-    createAt: new Date().getTime()
-  });
+  socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
 
-  socket.broadcast.emit('newMessage', {
-    from: 'Admin',
-    text: 'New user join',
-    createAt: new Date().getTime()
-  });
+  socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user join'));
 
   // socket.on('createEmail', function (newEmail) {
   //   console.log('createEmail', newEmail);
@@ -54,11 +47,7 @@ io.on('connection', function (socket) {
   socket.on('createMessage', function (message) {
     console.log('createMessage', message);
 
-    io.emit('newMessage', {
-      from: message.from,
-      text: message.text,
-      createAt: new Date().getTime()
-    });
+    io.emit('newMessage', generateMessage(message.from, message.text));
     
     // socket.broadcast.emit('newMessage', {
     //   from: message.from,
