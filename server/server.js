@@ -20,17 +20,37 @@ app.set('view engine', 'hbs');
 app.use(express.static(publicPath));
 
 io.on('connection', function (socket) {
-    console.log('New user connected');
+  console.log('New user connected');
 
-    socket.on('disconnect', function () {
-        console.log('User was Disconnected');
-    })
+  // socket.emit('newEmail', {
+  //   from: 'halvarado@example.com',
+  //   text: 'Hey. What is going on.',
+  //   createAt: 123
+  // });
+
+  socket.emit('newMessage', {
+    from: 'Andrew',
+    to: 'Jen',
+    text: 'Hey. What is going on.',
+    createAt: 123
+  });
+
+  // socket.on('createEmail', function (newEmail) {
+  //   console.log('createEmail', newEmail);
+  // });
+
+  socket.on('createMessage', function (newMessage) {
+    console.log('createMessage', newMessage);
+  });
+
+  socket.on('disconnect', function () {
+    console.log('User was Disconnected');
+  });
+
 });
 
-
-
 server.listen(port, function () {
-    console.log('Started on port ' + port);
+  console.log('Started on port ' + port);
 });
 
 module.exports = {
