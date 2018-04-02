@@ -29,13 +29,6 @@ io.on('connection', function (socket) {
   //   createAt: 123
   // });
 
-  // socket.emit('newMessage', {
-  //   from: 'Andrew',
-  //   to: 'Jen',
-  //   text: 'Hey. What is going on.',
-  //   createAt: 123
-  // });
-
   socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
 
   socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user join'));
@@ -44,16 +37,12 @@ io.on('connection', function (socket) {
   //   console.log('createEmail', newEmail);
   // });
 
-  socket.on('createMessage', function (message) {
+  socket.on('createMessage', function (message, callback) {
     console.log('createMessage', message);
 
     io.emit('newMessage', generateMessage(message.from, message.text));
     
-    // socket.broadcast.emit('newMessage', {
-    //   from: message.from,
-    //   text: message.text,
-    //   createAt: new Date().getTime()
-    // });
+    callback('This is from the server.');
   });
 
   socket.on('disconnect', function () {
