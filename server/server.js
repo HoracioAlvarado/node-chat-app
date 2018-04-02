@@ -39,8 +39,14 @@ io.on('connection', function (socket) {
   //   console.log('createEmail', newEmail);
   // });
 
-  socket.on('createMessage', function (newMessage) {
-    console.log('createMessage', newMessage);
+  socket.on('createMessage', function (message) {
+    console.log('createMessage', message);
+
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createAt: new Date().getTime()
+    });
   });
 
   socket.on('disconnect', function () {
